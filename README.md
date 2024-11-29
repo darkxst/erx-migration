@@ -1,8 +1,8 @@
 # Openwrt Edgerouter X Migration Script for Linux 6.6
 
-The OEM layout on the Edgerouter X has two kernel slots that are 3MB each. Starting with Linux 6.6 the kernel images no longer fit into this layout, thus starting with Openwrt 24.x[^1] users will need to migrate to the new layout.
+The OEM layout on the Edgerouter X has two kernel slots that are 3MB each. Starting with Linux 6.6 the kernel images no longer fit into this layout, thus when upgrading to Openwrt 24.10 users will need to migrate to the new layout.
 
-PR [#15194](https://github.com/openwrt/openwrt/pull/15194) introduces a new partition layout allowing for kernels up to 6MB:
+PR [#15194](https://github.com/openwrt/openwrt/pull/15194) introduced a new partition layout allowing for kernels up to 6MB:
 
 ```
 root@OpenWrt:/# cat /proc/mtd
@@ -14,13 +14,7 @@ mtd3: 00600000 00020000 "kernel"
 mtd4: 0f7c0000 00020000 "ubi"
 ```
 
-The scripts in this repository can be used to migrate existing installs 21.02, 22.03 and 23.05 to migrate to the new layout. Hopefully these scripts will be backported to 23.05 in the next stable release
-
-## Pre-step
-Until [#15194](https://github.com/openwrt/openwrt/pull/15194) is merged, you can build an openwrt snapshot from that PR, then:
-- Host `openwrt-ramips-mt7621-ubnt_edgerouter-x-squashfs-sysupgrade.bin` on a webserver on your lan
-- on the router `export TESTSITE="http://<host>/downloads-path/"`
-- Then proceed per below
+The scripts in this repository can be used to migrate existing installs 21.02, 22.03 or 23.05 to the new layout. It will install the latest 24.10 snapshot to your device. Hopefully these scripts will be backported to 23.05 in the next stable release
 
 ## Migration
 
@@ -36,10 +30,13 @@ Until [#15194](https://github.com/openwrt/openwrt/pull/15194) is merged, you can
 	cd /tmp
 	./ubnt_erx_migrate.sh
 	```
-5. This will download firmware update, then flash new kernel and rootfs and finally reboot.
+5. This will download firmware update, check sha256 sums, then flash new kernel and rootfs and finally reboot.
 
-
-
+## Local Install
+you can also build your own openwrt snapshot and migrate directly to that:
+- Host `openwrt-ramips-mt7621-ubnt_edgerouter-x-squashfs-sysupgrade.bin` on a webserver on your lan
+- on the router `export TESTSITE="http://<host>/downloads-path/"`
+- Then proceed per above instructions
 
 ## TFTP Serial Installation
 Alternatively you can directly install the new builds over Serial console:
@@ -47,5 +44,5 @@ Alternatively you can directly install the new builds over Serial console:
 2. Boot `openwrt-ramips-mt7621-ubnt_edgerouter-x-initramfs-kernel.bin`
 3. Then `sysupgrade -n -F openwrt-ramips-mt7621-ubnt_edgerouter-x-squashfs-sysupgrade.bin`
 
-[^1]: Snapshot builds once they are re-enabled will also need this migration.  
+
 [^2]: https://github.com/stman/OpenWRT-19.07.2-factory-tar-file-for-Ubiquiti-EdgeRouter-x
