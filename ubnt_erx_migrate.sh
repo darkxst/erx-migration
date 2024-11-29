@@ -9,8 +9,9 @@ include /lib/upgrade
 BOARD="$(board_name | sed 's/,/_/g')"
 
 # Use snapshots until a stable 24.x release
-SITE="https://downloads.openwrt.org/snapshots/targets/ramips/mt7621"
-FILE="openwrt-ramips-mt7621-${BOARD}-squashfs-sysupgrade.bin"
+SITE="https://downloads.openwrt.org/releases/24.10-SNAPSHOT/targets/ramips/mt7621/"
+PATTERN="${BOARD}-squashfs-sysupgrade.bin"
+FILE=$(wget -qO- "$SITE" | grep -oP '(?<=href=")[^"]*' | grep "$PATTERN" | head -n 1)
 tar_file="/tmp/sysupgrade.img"
 SITE=${TESTSITE:-$SITE}
 
@@ -45,7 +46,7 @@ confirm_migration() {
 
 download_image(){
     wget -qO "$tar_file" "$SITE/$FILE"
-    sha256=$(wget -qO- "$SITE/sha256sums" | grep "$BOARD-squashfs-sysupgrade.bin" | cut -d ' ' -f1)
+    sha256=$(wget -qO- "$SITE/sha256sums" | grep "$PATTERN" | cut -d ' ' -f1)
     sha256local=$(sha256sum "$tar_file" | cut -d ' ' -f1)
     if [ "$sha256" != "$sha256local" ]; then
             echo "Downloaded image checksum mismatch" >&2
