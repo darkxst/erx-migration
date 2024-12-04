@@ -8,12 +8,19 @@ include /lib/upgrade
 
 BOARD="$(board_name | sed 's/,/_/g')"
 
-# Use snapshots until a stable 24.x release
-SITE="https://downloads.openwrt.org/releases/24.10-SNAPSHOT/targets/ramips/mt7621/"
-PATTERN="${BOARD}-squashfs-sysupgrade.bin"
-FILE=$(wget -qO- "$SITE" | grep -oP '(?<=href=")[^"]*' | grep "$PATTERN" | head -n 1)
-tar_file="/tmp/sysupgrade.img"
+RC="24.10.0-rc2"
+SITE="https://downloads.openwrt.org/releases/${RC}/targets/ramips/mt7621/"
+SNAPSITE="https://downloads.openwrt.org/releases/24.10-SNAPSHOT/targets/ramips/mt7621/"
+
+if [ -n "$SNAPSHOT" ]; then
+    SITE=${SNAPSITE}
+fi
+
 SITE=${TESTSITE:-$SITE}
+PATTERN="${BOARD}-squashfs-sysupgrade.bin"
+FILE=$(wget -qO- "$SITE" | grep -o 'href="[^"]*' | sed 's/href="//' | grep "$PATTERN" | head -n 1)
+tar_file="/tmp/sysupgrade.img"
+
 
 
 confirm_migration() {
@@ -45,6 +52,7 @@ confirm_migration() {
 }
 
 download_image(){
+    echo "Downloading $SITE/$FILE"
     wget -qO "$tar_file" "$SITE/$FILE"
     sha256=$(wget -qO- "$SITE/sha256sums" | grep "$PATTERN" | cut -d ' ' -f1)
     sha256local=$(sha256sum "$tar_file" | cut -d ' ' -f1)
