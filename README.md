@@ -14,7 +14,7 @@ mtd3: 00600000 00020000 "kernel"
 mtd4: 0f7c0000 00020000 "ubi"
 ```
 
-The scripts in this repository can be used to migrate existing installs 21.02, 22.03 or 23.05 to the new layout. It will install the latest 24.10 snapshot to your device. Hopefully these scripts will be backported to 23.05 in the next stable release
+The scripts in this repository can be used to migrate existing installs 21.02, 22.03 or 23.05 to the new layout. It will install the latest 24.10 release candidate to your device. Hopefully these scripts will be backported to 23.05 in the next stable release
 
 ## Migration
 
@@ -31,7 +31,11 @@ The scripts in this repository can be used to migrate existing installs 21.02, 2
 	./ubnt_erx_migrate.sh
 	```
 5. This will download firmware update, check sha256 sums, then flash new kernel and rootfs and finally reboot.
-
+## Snapshot
+You can instead install a 24.10 snapshot build with this command:
+```sh
+SNAPSHOT=y ./ubnt_erx_migrate.sh
+```
 ## Local Install
 you can also build your own openwrt snapshot and migrate directly to that:
 - Host `openwrt-ramips-mt7621-ubnt_edgerouter-x-squashfs-sysupgrade.bin` on a webserver on your lan
