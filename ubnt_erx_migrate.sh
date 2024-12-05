@@ -69,8 +69,6 @@ download_image(){
         echo "Invalid image file" >&2
         exit 1
     fi
-    cp /sbin/ubnt_erx_stage2.sh /tmp
-
 }
 
 confirm_migration
