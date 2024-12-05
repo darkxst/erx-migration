@@ -6,6 +6,7 @@ include /lib/upgrade
 
 . /usr/share/libubox/jshn.sh
 
+export VERBOSE=1
 BOARD="$(board_name | sed 's/,/_/g')"
 
 RC="24.10.0-rc2"
@@ -69,8 +70,6 @@ download_image(){
         echo "Invalid image file" >&2
         exit 1
     fi
-    cp /sbin/ubnt_erx_stage2.sh /tmp
-
 }
 
 confirm_migration
@@ -78,8 +77,11 @@ download_image
 
 install_bin /sbin/upgraded
 
+v "Commencing upgrade. Closing all shell sessions and rebooting."
+
 RAM_ROOT="/tmp/root"
 COMMAND="sh /tmp/ubnt_erx_stage2.sh"
+SAVE_PARTITIONS=0
 
 json_init
 json_add_string prefix "$RAM_ROOT"
