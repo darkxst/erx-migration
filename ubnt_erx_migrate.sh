@@ -9,6 +9,10 @@ include /lib/upgrade
 export VERBOSE=1
 BOARD="$(board_name | sed 's/,/_/g')"
 
+if [ ! -d /etc/ssl/certs/ ]; then
+    WGET_OPTS="--no-check-certificate"
+fi
+
 RC="24.10.0-rc2"
 SITE="https://downloads.openwrt.org/releases/${RC}/targets/ramips/mt7621/"
 SNAPSITE="https://downloads.openwrt.org/releases/24.10-SNAPSHOT/targets/ramips/mt7621/"
@@ -19,7 +23,7 @@ fi
 
 SITE=${TESTSITE:-$SITE}
 PATTERN="${BOARD}-squashfs-sysupgrade.bin"
-FILE=$(wget -qO- "$SITE" | grep -o 'href="[^"]*' | sed 's/href="//' | grep "$PATTERN" | head -n 1)
+FILE=$(wget ${WGET_OPTS} -qO- "$SITE" | grep -o 'href="[^"]*' | sed 's/href="//' | grep "$PATTERN" | head -n 1)
 tar_file="/tmp/sysupgrade.img"
 
 
@@ -54,8 +58,8 @@ confirm_migration() {
 
 download_image(){
     echo "Downloading $SITE/$FILE"
-    wget -qO "$tar_file" "$SITE/$FILE"
-    sha256=$(wget -qO- "$SITE/sha256sums" | grep "$PATTERN" | cut -d ' ' -f1)
+    wget ${WGET_OPTS} -qO "$tar_file" "$SITE/$FILE"
+    sha256=$(wget ${WGET_OPTS} -qO- "$SITE/sha256sums" | grep "$PATTERN" | cut -d ' ' -f1)
     sha256local=$(sha256sum "$tar_file" | cut -d ' ' -f1)
     if [ "$sha256" != "$sha256local" ]; then
             echo "Downloaded image checksum mismatch" >&2

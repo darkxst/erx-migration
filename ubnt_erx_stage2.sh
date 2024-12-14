@@ -54,6 +54,24 @@ prepare_kernel(){
 }
 
 prepare_rootfs(){
+    #Remove volume possibly left over from stock firmware
+    v "Checking for leftover factory volume..."
+    local ubidev="$( nand_find_ubi "$CI_UBIPART" )"
+    if [ -z "$ubidev" ]; then
+        local mtdnum="$( find_mtd_index "$CI_UBIPART" )"
+        if [ -z "$mtdnum" ]; then
+            echo "cannot find ubi mtd partition $CI_UBIPART" >&2
+            exit 1
+        fi
+        ubiattach -m "$mtdnum"
+        sync
+        ubidev="$( nand_find_ubi "$CI_UBIPART" )"
+    fi
+    if [ -n "$ubidev" ]; then
+        local troot_ubivol="$( nand_find_volume $ubidev troot )"
+        [ -n "$troot_ubivol" ] && ubirmvol /dev/$ubidev -N troot || true
+    fi
+
     v "Flashing rootfs..."
     local rootfs_file="/tmp/$board_dir/root"
     local rootfs_length=$( (cat "$rootfs_file" | wc -c) 2> /dev/null)
