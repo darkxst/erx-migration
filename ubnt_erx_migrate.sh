@@ -33,8 +33,8 @@ confirm_migration() {
         ubnt,edgerouter-x|\
         ubnt,edgerouter-x-sfp)
             compat=$(uci -q get system.@system[0].compat_version)
-            if [ "$compat" != "1.1" ]; then
-                echo "Incompatible compat version $compat" >&2
+            if [ -n "$compat" ] && [ "$compat" == "2.0" ]; then
+                echo "Device already migrated to new layout" >&2
                 exit 1
             fi
             ;;
