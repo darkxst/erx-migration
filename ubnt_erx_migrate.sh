@@ -13,7 +13,7 @@ if [ ! -d /etc/ssl/certs/ ]; then
     WGET_OPTS="--no-check-certificate"
 fi
 
-RC="24.10.0-rc2"
+RC="24.10.0-rc7"
 SITE="https://downloads.openwrt.org/releases/${RC}/targets/ramips/mt7621/"
 SNAPSITE="https://downloads.openwrt.org/releases/24.10-SNAPSHOT/targets/ramips/mt7621/"
 
