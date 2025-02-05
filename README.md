@@ -14,7 +14,7 @@ mtd3: 00600000 00020000 "kernel"
 mtd4: 0f7c0000 00020000 "ubi"
 ```
 
-The scripts in this repository can be used to migrate existing installs 21.02, 22.03 or 23.05 to the new layout. It will install the latest 24.10 release candidate to your device. Hopefully these scripts will be backported to 23.05 in the next stable release
+The scripts in this repository can be used to migrate existing installs 21.02, 22.03 or 23.05 to the new layout. It will install the latest 24.10 release to your device. Hopefully these scripts will be backported to 23.05 in the next stable release
 
 ## Migration
 
