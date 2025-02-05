@@ -13,8 +13,8 @@ if [ ! -d /etc/ssl/certs/ ]; then
     WGET_OPTS="--no-check-certificate"
 fi
 
-RC="24.10.0-rc7"
-SITE="https://downloads.openwrt.org/releases/${RC}/targets/ramips/mt7621/"
+REL="24.10.0"
+SITE="https://downloads.openwrt.org/releases/${REL}/targets/ramips/mt7621/"
 SNAPSITE="https://downloads.openwrt.org/releases/24.10-SNAPSHOT/targets/ramips/mt7621/"
 
 if [ -n "$SNAPSHOT" ]; then
