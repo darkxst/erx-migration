@@ -28,6 +28,7 @@ The scripts in this repository can be used to migrate existing installs 21.02, 2
 4. Run below shell commands
 	```
 	cd /tmp
+	chmod +x ./ubnt_erx_migrate.sh
 	./ubnt_erx_migrate.sh
 	```
 5. This will download firmware update, check sha256 sums, then flash new kernel and rootfs and finally reboot.
