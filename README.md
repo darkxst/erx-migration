@@ -31,6 +31,13 @@ The scripts in this repository can be used to migrate existing installs 21.02, 2
 	./ubnt_erx_migrate.sh
 	```
 5. This will download firmware update, check sha256 sums, then flash new kernel and rootfs and finally reboot.
+6. If you restore a backup after migration is complete, this will override the `compat` version, with the previous version from the backup. Ensure migration completed successfully and then manually update compat vesion back to 2.0:
+
+```
+uci get system.@system[0].compat_version = "2.0"
+```
+
+
 ## Snapshot
 You can instead install a 24.10 snapshot build with this command:
 ```sh
