@@ -35,7 +35,8 @@ The scripts in this repository can be used to migrate existing installs 21.02, 2
 6. If you restore a backup after migration is complete, this will override the `compat` version, with the previous version from the backup. Ensure migration completed successfully and then manually update compat vesion back to 2.0:
 
 ```
-uci get system.@system[0].compat_version = "2.0"
+uci set system.@system[0].compat_version=2.0
+uci commit
 ```
 
 
