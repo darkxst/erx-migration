@@ -46,7 +46,8 @@ SNAPSHOT=y ./ubnt_erx_migrate.sh
 ```
 ## Local Install
 you can also build your own openwrt snapshot and migrate directly to that:
-- Host `openwrt-ramips-mt7621-ubnt_edgerouter-x-squashfs-sysupgrade.bin` on a webserver on your lan
+- Host `openwrt-ramips-mt7621-ubnt_edgerouter-x-squashfs-sysupgrade.bin` and `sha256sums` on a webserver on your lan accessible at http://<host>/downloads-path/
+- http://<host>/downloads-path/ must be autoindexed or return at least `href=http://<host>/downloads-path/<your-image-file-name>-squashfs-sysupgrade.bin`
 - on the router `export TESTSITE="http://<host>/downloads-path/"`
 - Then proceed per above instructions
 
