@@ -19,30 +19,30 @@ The scripts in this repository can be used to migrate existing installs 21.02, 2
 ## Migration
 
 **WARNING** All settings will be wiped make sure to backup your settings before proceeding.
-1. If you are still on Stock OS install factory images for 22.03[^2] first
-2. Login to router using ssh
-3. Copy both scripts to `/tmp/` on your router
-	- `ubnt_erx_migrate.sh
-	- `ubnt_erx_stage2.sh
-4. Run below shell commands
+1. If you are still on the stock OS, install factory images for 22.03[^2] first.
+2. (OPTIONAL) If you need to work without internet, download the correct 24.10 sysupgrade.bin file for your model of router and verify[^3] it ahead of time.
+3. Login to your router using ssh.
+4. Copy both scripts to the `/tmp/` directory on your router and ensure they are named `ubnt_erx_migrate.sh` and `ubnt_erx_stage2.sh`.
+5. (OPTIONAL) Rename and copy the pre-fetched sysupgrade.bin file to `/tmp/sysupgrade.img` on your router the same way you copied the scripts there in the previous step.
+6. Run the following shell commands:
 	```
 	cd /tmp
-	chmod +x ./ubnt_erx_migrate.sh
+	chmod +x ubnt_erx_migrate.sh
 	./ubnt_erx_migrate.sh
 	```
-5. This will download firmware update, check sha256 sums, then flash new kernel and rootfs and finally reboot.
-6. The device is set to a factory default configuration.
+7. This will download the firmware update (if needed) and verify it, then flash the new kernel and rootfs and, finally, reboot.
+8. The device will be left in a factory default configuration.
 
 **Restoring backup after upgrade**
-1. Login to router using ssh (root, no pwd)
-2. Check that the comat version is set to 2: ```uci get system.@system[0].compat_version```
-3. Restore the backup (command line or webinterface) and reboot the device if not done automatically
-4. Login to router using ssh
+1. Login to router using ssh (root, no pwd).
+2. Check that the comat version is set to 2: ```uci get system.@system[0].compat_version```.
+3. Restore the backup (command line or webinterface) and reboot the device if not done automatically.
+4. Login to router using ssh.
 5. Ensure migration completed successfully and then manually update compat vesion back to 2.0:
-```
-uci set system.@system[0].compat_version=2.0
-uci commit
-```
+	```
+	uci set system.@system[0].compat_version=2.0
+	uci commit
+	```
 
 ## Snapshot
 You can instead install a 24.10 snapshot build with this command:
@@ -62,5 +62,5 @@ Alternatively you can directly install the new builds over Serial console:
 2. Boot `openwrt-ramips-mt7621-ubnt_edgerouter-x-initramfs-kernel.bin`
 3. Then `sysupgrade -n -F openwrt-ramips-mt7621-ubnt_edgerouter-x-squashfs-sysupgrade.bin`
 
-
 [^2]: https://github.com/stman/OpenWRT-19.07.2-factory-tar-file-for-Ubiquiti-EdgeRouter-x
+[^3]: https://openwrt.org/docs/guide-quick-start/verify_firmware_checksum

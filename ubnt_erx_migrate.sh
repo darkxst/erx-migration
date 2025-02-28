@@ -26,8 +26,6 @@ PATTERN="${BOARD}-squashfs-sysupgrade.bin"
 FILE=$(wget ${WGET_OPTS} -qO- "$SITE" | grep -o 'href="[^"]*' | sed 's/href="//' | grep "$PATTERN" | head -n 1)
 tar_file="/tmp/sysupgrade.img"
 
-
-
 confirm_migration() {
     case "$(board_name)" in
         ubnt,edgerouter-x|\
@@ -65,6 +63,14 @@ download_image(){
             echo "Downloaded image checksum mismatch" >&2
             exit 1
     fi
+}
+
+check_for_image(){
+    if [ -f "$tar_file" ]; then
+        echo "Found local $tar_file... Skipping download step."
+    else
+        download_image
+    fi
 
     board_dir=$( (tar tf "$tar_file" | grep -m 1 '^sysupgrade-.*/$') 2> /dev/null)
     export board_dir="${board_dir%/}"
@@ -77,7 +83,7 @@ download_image(){
 }
 
 confirm_migration
-download_image
+check_for_image
 
 install_bin /sbin/upgraded
 
@@ -97,5 +103,3 @@ json_add_int save_partitions "$SAVE_PARTITIONS"
 json_close_object
 
 ubus call system sysupgrade "$(json_dump)"
-
-

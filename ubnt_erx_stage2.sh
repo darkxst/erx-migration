@@ -4,7 +4,6 @@
 
 include /lib/upgrade
 
-
 # Manually handle kernel partitions
 CI_KERNPART="none"
 
@@ -93,4 +92,3 @@ umount -a
 reboot -f
 sleep 5
 echo b 2>/dev/null >/proc/sysrq-trigger
-
